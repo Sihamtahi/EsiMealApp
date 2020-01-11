@@ -97,7 +97,7 @@ class _AddProductState extends State<AddProduct> {
                     ),
                   ),
 
-                  Expanded(
+                  /*Expanded(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: OutlineButton(
@@ -109,9 +109,9 @@ class _AddProductState extends State<AddProduct> {
                         child: _displayChild2()
                       ),
                     ),
-                  ),
+                  ),*/
 
-                  Expanded(
+                  /*Expanded(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: OutlineButton(
@@ -122,7 +122,7 @@ class _AddProductState extends State<AddProduct> {
                         child: _displayChild3(),
                       ),
                     ),
-                  ),
+                  ),*/
                 ],
               ),
 

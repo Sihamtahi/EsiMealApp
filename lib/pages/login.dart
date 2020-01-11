@@ -5,7 +5,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:marketing_app/commons/loading.dart';
+import 'package:marketing_app/db/auth.dart';
 import 'package:marketing_app/pages/signup.dart';
+import 'package:marketing_app/provider/user_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'cart.dart';
@@ -18,155 +22,30 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
 
-  final GoogleSignIn googleSignIn = new GoogleSignIn();
-  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
+  final _key = GlobalKey<ScaffoldState>();
   TextEditingController _emailTextController = TextEditingController();
   TextEditingController _passwordTextController = TextEditingController();
 
-  SharedPreferences preferences;
-  bool loading = false;
-  bool isLogedin = false;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final _controller = new PageController();
+
+
+  bool hidePass = true;
+
   @override
   void initState() {
     super.initState();
 
-    isSignedIn();
-    // une autre fonction pour le login
-    /*getUser().then((user) {
-      if (user != null) {
-        // send the user to the home page
-        // homePage();
-      }
-    });*/
-  }
 
-
-  void signInWithEmail() async {
-    // marked async
-    FirebaseUser user;
-    try {
-      user = await _auth.signInWithEmailAndPassword(
-          email: _emailTextController.text, password: _passwordTextController.text);
-    } catch (e) {
-      print(e.toString());
-    } finally {
-      if (user != null) {
-        // sign in successful!
-        // ex: bring the user to the home page
-      } else {
-        // sign in unsuccessful
-        // ex: prompt the user to try again
-      }
-    }
-  }
-
-  Future<FirebaseUser> getUser() async {
-    return await _auth.currentUser();
-  }
-  void isSignedIn() async {
-    setState(() {
-      loading = true;
-    });
-    FirebaseUser user = await firebaseAuth.currentUser();
-    print(user.email);
-    //preferences = await SharedPreferences.getInstance();
-   // isLogedin = await googleSignIn.isSignedIn();
-
-    await firebaseAuth.currentUser().then((user){
-
-      if(user != null){
-
-         setState(()=> isLogedin=true);
-      }
-    });
-    if (isLogedin) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => DetailPage(HomePage())));
-    }
-    setState(() {
-      loading = false;
-    });
-  }
-// -----------------------------------------------------------------------------------------------------------------
-  /*Future handleSignInEmail()async{
-    preferences = await SharedPreferences.getInstance();
-    setState(() {
-      loading = true;
-    });
-
-    setState(() {
-      loading = false;
-    });
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => HomePage()));
-    if (firebaseUser != null) {
-   } else {
-  Fluttertoast.showToast(msg: "Login failed :(");
-  }
-  } */
-
-  // -----------------------------------------------------------------------------------------------------------------
-  Future handleSignIn() async {
-    preferences = await SharedPreferences.getInstance();
-    setState(() {
-      loading = true;
-    });
-    //------------------------------ // partie Sign in with Google---------------------------------------------------
-    GoogleSignInAccount googleUser = await googleSignIn.signIn();
-    GoogleSignInAuthentication googleSignInAuthentication =
-    await googleUser.authentication;
-   /* FirebaseUser firebaseUser = await firebaseAuth.signInWithGoogle(
-        idToken: googleSignInAuthentication.idToken,
-        accessToken: googleSignInAuthentication.accessToken);*/
-    FirebaseUser firebaseUser = await firebaseAuth.signInWithEmailAndPassword(
-        email: googleSignInAuthentication.idToken, password: googleSignInAuthentication.accessToken);
-
-    if (firebaseUser != null) {
-      final QuerySnapshot result = await Firestore.instance
-          .collection("users")
-          .where("id", isEqualTo: firebaseUser.uid)
-          .getDocuments();
-      final List<DocumentSnapshot> documents = result.documents;
-
-      if (documents.length == 0) {
-//          insert the user to our collection
-        Firestore.instance
-            .collection("users")
-            .document(firebaseUser.uid)
-            .setData({
-          "id": firebaseUser.uid,
-          "username": firebaseUser.displayName,
-          "profilePicture": firebaseUser.photoUrl
-        });
-
-        await preferences.setString("id", firebaseUser.uid);
-        await preferences.setString("username", firebaseUser.displayName);
-        await preferences.setString("photoUrl", firebaseUser.displayName);
-      } else {
-        await preferences.setString("id", documents[0]['id']);
-        await preferences.setString("username", documents[0]['username']);
-        await preferences.setString("photoUrl", documents[0]['photoUrl']);
-      }
-
-      Fluttertoast.showToast(msg: "Login was successful");
-      setState(() {
-        loading = false;
-      });
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => HomePage()));
-    } else {
-      Fluttertoast.showToast(msg: "Login failed :(");
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height / 3;
+    final user = Provider.of<UserProvider>(context);
+
     return Scaffold(
-      body: Stack(
+      key: _key,
+      body: user.status == Statuus.Authenticating ? Loading() :Stack(
        // mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Padding(
@@ -226,6 +105,7 @@ class _LoginState extends State<Login> {
                               padding: const EdgeInsets.only(left:12.0),
                               child: TextFormField(
                                 controller: _passwordTextController,
+                                obscureText: hidePass,
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
                                   hintText: "Password",
@@ -251,9 +131,12 @@ class _LoginState extends State<Login> {
                                color: Colors.deepOrange.shade700,
                               elevation: 0.0,
 
-                              child: MaterialButton(onPressed: (){
-                                isSignedIn();
-                                //signInWithEmail();
+                              child: MaterialButton(onPressed: ()async{
+                                if(_formKey.currentState.validate()){
+                                  if(!await user.signIn(_emailTextController.text, _passwordTextController.text)){
+                                    _key.currentState.showSnackBar(SnackBar(content: Text("Sign in failed")));
+                                  }
+                                }
                               },
                                 minWidth: MediaQuery.of(context).size.width,
                                 child: Text("Login", textAlign: TextAlign.center,
@@ -316,13 +199,20 @@ class _LoginState extends State<Login> {
                                       const EdgeInsets.fromLTRB(14.0, 8.0, 14.0, 8.0),
                                       child: Material(
                                           child: MaterialButton(
-                                              onPressed: () {},
+                                              onPressed: () async{
+                                           if(await user.googleSignIn()==true){
+                                             Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+                                             }
+                                             else{
+                                             _key.currentState.showSnackBar(SnackBar(content: Text("Sign in with Google failed")));
+                                           }
+
+                                              },
                                               child: Image.asset("images/ggg.png", width: 60,)
                                           )),
                                     ),
                                   ],
                                 ),
-
                               ],
                             )
                           ),
@@ -350,9 +240,6 @@ class _LoginState extends State<Login> {
       ),
     );
   }
-
-
-
 }
 
 

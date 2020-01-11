@@ -4,6 +4,8 @@ import 'package:marketing_app/components/horizontal_listview.dart';
 import 'package:marketing_app/components/products.dart';
 import 'package:marketing_app/pages/cart.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:marketing_app/provider/user_provider.dart';
+import 'package:provider/provider.dart';
 
 import 'login.dart';
 
@@ -13,18 +15,22 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  static FirebaseAuth _auth = FirebaseAuth.instance;
+  TextEditingController _searchController = TextEditingController();
+  bool _isLoading = false;
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserProvider>(context);
     Widget image_carousel = new Container(
       height: 200.0,
       child:  Carousel(
         boxFit: BoxFit.cover,
         images: [
-          AssetImage('images/c1.jpg'),
-          AssetImage('images/m1.jpeg'),
-          AssetImage('images/w3.jpeg'),
-          AssetImage('images/w4.jpeg'),
-          AssetImage('images/m2.jpg'),
+          AssetImage('images/met6.jpg'),
+          AssetImage('images/met7.jpg'),
+          AssetImage('images/met8.jpg'),
+          AssetImage('images/met9.jpg'),
+
         ],
         autoplay: true,
         animationCurve: Curves.fastOutSlowIn,
@@ -36,12 +42,36 @@ class _HomePageState extends State<HomePage> {
     );
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.deepOrange),
         elevation: 0.1,
-        backgroundColor: Colors.red,
-        title: new Center(child: new Text("ShopApp", textAlign: TextAlign.center)),
+        backgroundColor: Colors.white,
+        title: Material(
+          borderRadius: BorderRadius.circular(10.0),
+          color: Colors.grey[100].withOpacity(0.2),
+          elevation: 0.0,
+          child: Padding(
+            padding: const EdgeInsets.all(0.0),
+            child: ListTile(
+              title: TextFormField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                  hintText: "Search...",
+                  border: InputBorder.none,
+
+                ),
+                validator: (value){
+                  if(value.isEmpty){
+                    return "The search field cannot be empty";
+                  }
+                  return null;
+                },
+              ),
+            ),
+          ),
+        ),
         actions: <Widget>[
-          new IconButton(icon: Icon(Icons.search,color: Colors.white,), onPressed: (){}),
-          new IconButton(icon: Icon(Icons.shopping_cart,color: Colors.white,), onPressed: (){
+          new IconButton(icon: Icon(Icons.search,color: Colors.deepOrange,), onPressed: (){}),
+          new IconButton(icon: Icon(Icons.shopping_cart,color: Colors.deepOrange,), onPressed: (){
             Navigator.of(context).push(new MaterialPageRoute(builder: (context)=> new Cart()));
           })
         ],
@@ -58,7 +88,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               decoration: new BoxDecoration(
-                color: Colors.red,
+                color: Colors.deepOrange,
               ),
             ),
             //      body
@@ -115,7 +145,7 @@ class _HomePageState extends State<HomePage> {
             ),
             InkWell(
               onTap: (){
-                SignOut();
+                user.signOut();
               },
               child: ListTile(
                 title: Text('Sign Out'),
@@ -128,25 +158,54 @@ class _HomePageState extends State<HomePage> {
       body: new ListView(
         children: <Widget>[
           image_carousel,
-          new Padding(padding: const EdgeInsets.all(8.0),
-            child: new Text('Categories'),),
+          //new Padding(padding: const EdgeInsets.all(8.0),
+            //child: new Text('Categories'),),
           // Horizontal List View Begins here
-          HorizontalList(),
-          new Padding(padding: const EdgeInsets.all(20.0),
-            child: new Text('Recent products'),),
+         // HorizontalList(),
+          Row(
+            children: <Widget>[
+              Expanded(
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      child: new Padding(padding: const EdgeInsets.all(20.0),
+                        child:
+                        MaterialButton(onPressed: (){},
+                          color: Colors.red,
+                          textColor: Colors.white,
+                          elevation: 0.2,
+                          child: new Text("Buy now",style: TextStyle(fontSize: 18.0)),
+                        ),
+
+                    )),
+              )
+
+            ],
+          ),
           // grid view
           Container(
             height: 320.0,
-            child: Products(),
+           child: Products(),
           ),
         ],
       ),
     );
   }
-  Future <Login> SignOut()  async{
-    await FirebaseAuth.instance.signOut();
 
-    return new Login();
+
+  Future<void> logoutUser() async{
+    return _auth.signOut();
   }
-}
+  Future <Login> SignOut()  async{
+  //  await FirebaseAuth.instance.signOut();
+    setState(() {_isLoading = true;});
+    try {
+      await _auth.signOut();
+      setState(() {_isLoading = false;});
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+    } catch(e) {
+      print(e);}
+  }
+    //return new Login();
+  }
+
 

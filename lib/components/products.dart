@@ -9,56 +9,56 @@ class _ProductsState extends State<Products> {
   //group of things
   var product_list = [
     {
-      "name":"Blazer",
-      "picture":"images/products/blazer1.jpeg",
+      "name":"Soupe",
+      "picture":"images/products/repas1.jpg",
       "old_price":120,
       "price":85,
     },
     {
-      "name":"Red dress",
-      "picture":"images/products/dress1.jpeg",
-      "old_price":100,
-      "price":55,
-    },
-    {
-      "name":"dress",
-      "picture":"images/products/dress2.jpeg",
+      "name":"Tacos",
+      "picture":"images/products/repas2.jpg",
       "old_price":140,
       "price":65,
     },
     {
-      "name":"hills",
-      "picture":"images/products/hills1.jpeg",
+      "name":"Pasta",
+      "picture":"images/products/met4.jpeg",
       "old_price":100,
       "price":55,
     },
     {
-      "name":"Blazer two",
-      "picture":"images/products/blazer2.jpeg",
+      "name":"Humberger",
+      "picture":"images/products/repas3.jpg",
       "old_price":100,
       "price":55,
     },
     {
-      "name":"pants",
-      "picture":"images/products/pants1.jpg",
-      "old_price":100,
-      "price":55,
-    },
-    {
-      "name":"skt",
-      "picture":"images/products/skt2.jpeg",
+      "name":"Pizza",
+      "picture":"images/products/repas4.jpg",
       "old_price":100,
       "price":55,
     },
     {
       "name":"pants",
-      "picture":"images/products/pants2.jpeg",
+      "picture":"images/products/repas5.jpg",
       "old_price":100,
       "price":55,
     },
     {
-      "name":"shoe",
-      "picture":"images/products/shoe1.jpg",
+      "name":"Coca",
+      "picture":"images/products/met5.jpeg",
+      "old_price":120,
+      "price":85,
+    },
+    {
+      "name":"Jus d'orange",
+      "picture":"images/products/met3.jpeg",
+      "old_price":140,
+      "price":65,
+    },
+    {
+      "name":"Red Bull",
+      "picture":"images/products/met1.jpeg",
       "old_price":100,
       "price":55,
     },
@@ -91,7 +91,7 @@ class Single_prod extends StatelessWidget {
   const Single_prod({this.prod_name, this.prod_picture, this.prod_old_price, this.prod_price}) ;
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return Container(
       child: Hero(tag: new Text("hero 1"), child: Material(
         child: InkWell(
           onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (context)=> new ProductDetails(
@@ -102,14 +102,14 @@ class Single_prod extends StatelessWidget {
           ))),
           child: GridTile(
             footer: Container(
-              color:
-              Colors.white70,
+              color: Colors.white,
               child: Row(
                 children: <Widget>[
                   Expanded(
+
                     child: Text(prod_name,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16.0),),
                   ),
-                  new Text("\$${prod_price}",style: TextStyle(color: Colors.red,fontWeight: FontWeight.bold,fontSize: 16.0)),
+                  new Text("\$${prod_price}",style: TextStyle(color: Colors.deepOrange,fontWeight: FontWeight.bold,fontSize: 16.0)),
                 ],
               ),
               /* ListTile(

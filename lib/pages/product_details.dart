@@ -224,20 +224,20 @@ class Similar_products extends StatefulWidget {
 class _Similar_productsState extends State<Similar_products> {
   var product_list = [
     {
-      "name":"Blazer",
-      "picture":"images/products/blazer1.jpeg",
+      "name":"Coca",
+      "picture":"images/products/met5.jpeg",
       "old_price":120,
       "price":85,
     },
     {
-      "name":"Cool dress",
-      "picture":"images/products/dress2.jpeg",
+      "name":"Jus d'orange",
+      "picture":"images/products/met3.jpeg",
       "old_price":140,
       "price":65,
     },
     {
-      "name":"Red hills",
-      "picture":"images/products/hills1.jpeg",
+      "name":"Coctail",
+      "picture":"images/products/met4.jpeg",
       "old_price":100,
       "price":55,
     },
