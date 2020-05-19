@@ -179,7 +179,6 @@ class _LoginState extends State<Login> {
                                         Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp()));
                                       },
                                       child: Text("Or", textAlign: TextAlign.center, style: TextStyle(color: Colors.black,  fontWeight: FontWeight.w400,fontSize: 16.0),)),
-
                                 ),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -213,6 +212,20 @@ class _LoginState extends State<Login> {
                                     ),
                                   ],
                                 ),
+                                Row(
+                                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                   children: <Widget>[
+                                     Padding( padding:
+                                         const EdgeInsets.fromLTRB(14.0, 8.0, 14.0, 8.0),
+                                         child: Material(
+                                         child: MaterialButton(
+                                          onPressed: () {
+                                            Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+                                          },
+                                          child: Text("Login without account", textAlign: TextAlign.center, style: TextStyle(color: Colors.red,  fontWeight: FontWeight.w400,fontSize: 16.0),)
+                                          )),
+                                     ),
+                                ]),
                               ],
                             )
                           ),
@@ -223,18 +236,6 @@ class _LoginState extends State<Login> {
             ),
           ),
 
-          /*Visibility(
-            visible: loading ?? true,
-            child: Center(
-              child: Container(
-                alignment: Alignment.center,
-                color: Colors.white.withOpacity(0.9),
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
-                ),
-              ),
-            ),
-          )*/
         ],
 
       ),

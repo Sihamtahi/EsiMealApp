@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:marketing_app/pages/Command_details.dart';
+import 'package:marketing_app/pages/ReservationController.dart';
 import 'package:marketing_app/pages/home.dart';
 import 'package:marketing_app/pages/login.dart';
 import 'package:marketing_app/pages/splash.dart';
 import 'package:marketing_app/provider/user_provider.dart';
 import 'package:provider/provider.dart';
+
+import 'ListDishes/mainPage.dart';
 
 void main(){
   runApp(ChangeNotifierProvider(builder: (_) => UserProvider.initialize(),
@@ -23,7 +26,7 @@ class ScreensController extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context);
-    /*switch(user.status){
+   switch(user.status){
       case Statuus.Uninitialized:
         return Splash();
       case Statuus.Unauthenticated:
@@ -32,8 +35,7 @@ class ScreensController extends StatelessWidget {
       case Statuus.Authenticated:
         return HomePage();
         default: return Login();
-    }*/
-    return Command();
+    }
   }
 }
 

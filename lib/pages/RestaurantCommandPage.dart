@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:marketing_app/ListDishes/dataModels.dart';
+import 'package:marketing_app/ListDishes/mainPage.dart';
 import 'package:marketing_app/pages/CommandClass.dart';
 import 'package:marketing_app/pages/Command_details.dart';
 import 'package:marketing_app/provider/user_provider.dart';
@@ -11,7 +13,9 @@ import 'home.dart';
 class RestaurantCommand extends StatefulWidget {
   final int nbPersonne;
   final DateTime time;
-  RestaurantCommand({this.nbPersonne,this.time});
+
+  RestaurantCommand({this.nbPersonne,this.time, List<Order> orders});
+
   @override
   _RestaurantCommandState createState() => _RestaurantCommandState();
 }
@@ -27,10 +31,12 @@ class _RestaurantCommandState extends State< RestaurantCommand> {
 
   bool hidePass = true;
 
-  DateTime get time => null;
+  DateTime get time => this.time;
 
-  int get nbPersonne => null;
+  int get nbPersonne => this.nbPersonne;
+  OrderedDish get panier => null;
 
+  List<Order> get orders => this.orders;
   @override
   void initState() {
     super.initState();
@@ -125,16 +131,15 @@ class _RestaurantCommandState extends State< RestaurantCommand> {
                                   elevation: 0.0,
                                   child: MaterialButton(
                                     onPressed: ()async{
-                                      int a = new Random() as int;
-                                      double prix = new Random() as double;
-                                      double prixRed = new Random() as double;
                                       Commande cmd = new ConsomResto(
-                                          a, prix,prixRed,true, nbPersonne,time,int.tryParse(_nbTableTextController.text),int.tryParse(_nbChaiseTextController.text));
-                                      cmd.valider();
+                                         0,0,0,true,1,DateTime.now(),null,int.tryParse(_nbTableTextController.text),int.tryParse(_nbChaiseTextController.text));
+                                      var route =  new MaterialPageRoute(builder: (context) => MainPage());
+                                      Navigator.of(context).push(route);
+
                                     },
                                     minWidth: MediaQuery.of(context).size.width,
                                     child: Text("Validate", textAlign: TextAlign.center,
-                                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20.0),),
+                                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20.0),),
                                   )
                               ),
                             ),

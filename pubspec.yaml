@@ -17,6 +17,7 @@ environment:
   sdk: ">=2.2.0 <3.0.0"
 
 dependencies:
+  flutter_staggered_grid_view: ^0.3.0
   flutter:
     sdk: flutter
 
@@ -74,6 +75,8 @@ flutter:
   #  - images/a_dot_ham.jpeg
   assets:
   - images/
+  - images/dishes/
+  - images/parallax/
   - images/products/blazer1.jpeg
   - images/products/blazer2.jpeg
   - images/products/dress1.jpeg
@@ -98,6 +101,14 @@ flutter:
   - images/products/repas3.jpg
   - images/products/repas2.jpg
   - images/products/repas1.jpg
+  fonts:
+        - family: Montserrat-Extralight
+          fonts:
+            - asset: fonts/Montserrat-ExtraLight.ttf
+
+        - family: Montserrat-Medium
+          fonts:
+            - asset: fonts/Montserrat-Medium.ttf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

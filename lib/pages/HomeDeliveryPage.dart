@@ -1,7 +1,9 @@
-import 'dart:async';
+
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:marketing_app/ListDishes/dataModels.dart';
+import 'package:marketing_app/ListDishes/mainPage.dart';
 import 'package:marketing_app/pages/CommandClass.dart';
 import 'package:marketing_app/pages/Command_details.dart';
 import 'package:marketing_app/provider/user_provider.dart';
@@ -11,7 +13,9 @@ import 'home.dart';
 class HomeDelivery extends StatefulWidget {
   final int nbPersonne;
   final DateTime time;
-  HomeDelivery({this.nbPersonne,this.time});
+  HomeDelivery({this.nbPersonne,this.time, List<Order> orders});
+
+
   @override
   _HomeDeliveryState createState() => _HomeDeliveryState();
 }
@@ -27,9 +31,12 @@ class _HomeDeliveryState extends State<HomeDelivery> {
 
   bool hidePass = true;
 
-  DateTime get time => null;
+  DateTime get time => this.time;
 
-  int get nbPersonne => null;
+  int get nbPersonne => this.nbPersonne;
+
+  List<Order> get orders => this.orders;
+
 
   @override
   void initState() {
@@ -106,14 +113,12 @@ class _HomeDeliveryState extends State<HomeDelivery> {
                                   color: Colors.deepOrange.shade700,
                                   elevation: 0.0,
                                   child: MaterialButton(
-                                    onPressed: ()async{
-                                      int a = new Random() as int;
-                                      double prix = new Random() as double;
-                                      double prixRed = new Random() as double;
-                                      Commande cmd = new LivreeDomicile(
-                                           a, prix,prixRed,true, nbPersonne,time,double.tryParse(_distanceTextController.text), (_addresseTextController.text).toString());
-                                          cmd.valider();
-                                      },
+                                    onPressed: (){
+                                     Commande cmd =  new LivreeDomicile(0,0,0,true,1,DateTime.now(),null,double.tryParse(_distanceTextController.text), (_addresseTextController.text).toString());
+
+                                       var route =  new MaterialPageRoute(builder: (context) => MainPage());
+                                      Navigator.of(context).push(route);
+                                        },
                                     minWidth: MediaQuery.of(context).size.width,
                                     child: Text("Valider", textAlign: TextAlign.center,
                                       style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20.0),),

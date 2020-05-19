@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
-import 'package:marketing_app/components/horizontal_listview.dart';
 import 'package:marketing_app/components/products.dart';
 import 'package:marketing_app/pages/cart.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:marketing_app/provider/user_provider.dart';
 import 'package:provider/provider.dart';
 
+import 'Command_details.dart';
 import 'login.dart';
 
 class HomePage extends StatefulWidget {
@@ -164,19 +164,38 @@ class _HomePageState extends State<HomePage> {
          // HorizontalList(),
           Row(
             children: <Widget>[
-              Expanded(
-                    child: Container(
-                      alignment: Alignment.centerLeft,
-                      child: new Padding(padding: const EdgeInsets.all(20.0),
-                        child:
-                        MaterialButton(onPressed: (){},
-                          color: Colors.red,
-                          textColor: Colors.white,
-                          elevation: 0.2,
-                          child: new Text("Buy now",style: TextStyle(fontSize: 18.0)),
-                        ),
+              InkWell(
+                onTap: (){
+                  showDialog(
+                    context: context,
+                    builder: (_){
+                      return Command();
+                    },
+                    //child: Container(color: Colors.greenAccent,)
 
-                    )),
+                  );
+                },
+                    child: Container(
+                        decoration: BoxDecoration(
+                            color: Color.fromRGBO(253, 241, 141, 1.0),
+                            boxShadow: [
+                              BoxShadow(color: Colors.grey[300], blurRadius: 10.0)
+                            ]),
+                        width: MediaQuery.of(context).size.width,
+                        height: 55.0,
+                        child: Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  "Go to menu ",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 18.0),
+                                ),
+                              ],
+                            ))),
               )
 
             ],

@@ -1,17 +1,15 @@
-import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:marketing_app/ListDishes/dataModels.dart';
+import 'package:marketing_app/ListDishes/mainPage.dart';
 import 'package:marketing_app/pages/CommandClass.dart';
-import 'package:marketing_app/pages/Command_details.dart';
 import 'package:marketing_app/provider/user_provider.dart';
 import 'package:provider/provider.dart';
-import 'home.dart';
 
 class EventCommand extends StatefulWidget {
-  final int nbPersonne;
-  final DateTime time;
-  EventCommand({this.nbPersonne,this.time});
+   int nbPersonne;
+   DateTime time;
+  EventCommand({this.nbPersonne,this.time, List<Order> orders});
   @override
   _EventCommandState createState() => _EventCommandState();
 }
@@ -23,9 +21,12 @@ class _EventCommandState extends State< EventCommand> {
 
   bool hidePass = true;
 
-  DateTime get time => null;
+  DateTime get time => this.time;
 
-  int get nbPersonne => null;
+  int get nbPersonne => this.nbPersonne;
+
+
+  List<Order> get orders => this.orders;
 
   @override
   void initState() {
@@ -64,14 +65,11 @@ class _EventCommandState extends State< EventCommand> {
                                   color: Colors.deepOrange.shade700,
                                   elevation: 0.0,
                                   child: MaterialButton(
-                                    onPressed: ()async{
-                                      int a = new Random() as int;
-                                      double prix = new Random() as double;
-                                      double prixRed = new Random() as double;
-                                      Commande cmd = new Event(
-                                          a, prix,prixRed,true, nbPersonne,time);
-                                      cmd.valider();
-                                    },
+                                    onPressed: (){
+                                      Commande cmd = new Event(0,0,0,true,1,DateTime.now(),null);
+                                      var route =  new MaterialPageRoute(builder: (context) => MainPage());
+                                      Navigator.of(context).push(route);
+                                     },
                                     minWidth: MediaQuery.of(context).size.width,
                                     child: Text("Valider", textAlign: TextAlign.center,
                                       style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20.0),),

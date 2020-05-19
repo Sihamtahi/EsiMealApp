@@ -1,3 +1,5 @@
+import 'package:marketing_app/ListDishes/dataModels.dart';
+
 abstract class Commande {
   int ID;
   double prix;
@@ -5,13 +7,16 @@ abstract class Commande {
   bool isDispo;
   int nbrPersonnes;
   DateTime date;
-  Commande(int ID,double prix,double prixReduction,bool isDispo,int nbrPersonnes,DateTime date){
+  List<Order> orders;
+
+  Commande(int ID,double prix,double prixReduction,bool isDispo,int nbrPersonnes,DateTime date,  List<Order> orders){
     this.ID=ID;
     this.prix=prix;
     this.prixReduction=prixReduction;
     this.isDispo=isDispo;
     this.nbrPersonnes=nbrPersonnes;
     this.date=date;
+    this.orders=orders;
   }
   valider();
   verifier_date();
@@ -19,32 +24,12 @@ abstract class Commande {
 
 }
 
-class event extends Commande{
-  event(int ID, double prix, double prixReduction, bool isDispo, int nbrPersonnes, DateTime date) : super(ID, prix, prixReduction, isDispo, nbrPersonnes, date);
-  @override
-  valider() {
-    // TODO: implement valider
-   print('commande validée');
-  }
-
-  @override
-  verifier_date() {
-    // TODO: implement verifier_date
-    return null;
-  }
-
-  @override
-  verifier_heure() {
-    // TODO: implement verifier_heure
-    return null;
-  }
-}
 
 class LivreeDomicile extends Commande {
   double distance;
   String addresse;
 
-  LivreeDomicile(int ID, double prix, double prixReduction, bool isDispo, int nbrPersonnes, DateTime date,double distance, String addresse) : super(0, 0.0, 0.0, false, 0, null)  {
+  LivreeDomicile(int ID, double prix, double prixReduction, bool isDispo, int nbrPersonnes, DateTime date, List<Order> orders,double distance, String addresse) : super(ID, prix, prixReduction,isDispo,nbrPersonnes,date,orders)  {
     this.distance=distance;
     this.addresse=addresse;
   }
@@ -72,7 +57,7 @@ class ConsomResto extends Commande{
   int nbChaise;
   int nbTable;
 
-  ConsomResto(int ID, double prix, double prixReduction, bool isDispo, int nbrPersonnes, DateTime date, int nbchaise,int nbtable) : super(ID, prix, prixReduction, isDispo, nbrPersonnes, date){
+  ConsomResto(int ID, double prix, double prixReduction, bool isDispo, int nbrPersonnes, DateTime date, List<Order> orders,int nbchaise,int nbtable) : super(ID, prix, prixReduction, isDispo, nbrPersonnes, date,orders){
     this.nbChaise=nbchaise;
     this.nbTable=nbtable;
   }
@@ -96,11 +81,10 @@ class ConsomResto extends Commande{
 
 }
 class Event extends Commande{
-  Event(int ID, double prix, double prixReduction, bool isDispo, int nbrPersonnes, DateTime date) : super(ID, prix, prixReduction, isDispo, nbrPersonnes, date);
+  Event(int ID, double prix, double prixReduction, bool isDispo, int nbrPersonnes, DateTime date, List<Order> orders) : super(ID, prix, prixReduction, isDispo, nbrPersonnes, date,orders);
 
   @override
   valider() {
-    // TODO: implement valider
     return null;
   }
 
